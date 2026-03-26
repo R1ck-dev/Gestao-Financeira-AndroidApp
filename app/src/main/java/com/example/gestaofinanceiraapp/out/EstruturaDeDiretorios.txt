@@ -1,0 +1,24 @@
+com.example.gestaofinanceiraapp
+ ├── core/                  // Configurações globais, utilitários transversais
+ │   ├── di/                // Injeção de Dependência
+ │   ├── security/          // Criptografia e gestão de tokens
+ │   └── util/              // Extensões e formatadores
+ │
+ ├── data/                  // Camada de Infraestrutura/Persistência
+ │   ├── local/room/        // Configuração do SQLite
+ │   │   ├── dao/           // Interfaces de acesso a dados
+ │   │   ├── entity/        // Modelos de banco de dados (anotados com @Entity)
+ │   │   └── AppDatabase.java // A classe abstrata que estende RoomDatabase
+ │   ├── mapper/            // Conversores: Entity <-> Domain Model
+ │   └── repository/        // Implementação real das interfaces de repositório do domínio
+ │
+ ├── domain/                // Camada de Regra de Negócio Pura
+ │   ├── model/             // POJOs (Plain Old Java Object) puros
+ │   ├── repository/        // Interfaces de acesso a dados
+ │   └── usecase/           // Casos de uso específicos
+ │
+ └── presentation/          // Camada de Apresentação
+     ├── auth/              // Telas e ViewModels de Login
+     ├── budget/            // Telas e ViewModels de Orçamento
+     ├── dashboard/         // Tela principal e ViewModel de sumário
+     └── ledger/            // Telas de input financeiro

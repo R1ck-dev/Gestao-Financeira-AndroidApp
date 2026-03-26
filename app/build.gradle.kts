@@ -15,33 +15,27 @@ android {
 
     defaultConfig {
         applicationId = "com.example.gestaofinanceiraapp"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        // Carregando o properties da raiz do projeto
-        val properties = Properties()
-        val localPropertiesFile = project.rootProject.file("local.properties")
-        if (localPropertiesFile.exists()) {
-            properties.load(FileInputStream(localPropertiesFile))
+        // Exportação de schemas do Room para versionamento e migrações
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments["room.schemaLocation"] = "$projectDir/schemas"
+            }
         }
-
-        // Acessando a chave GOOGLE_CLIENT_ID dentro do properties e injetando ela no BuildConfig
-        val googleClientId = properties.getProperty("GOOGLE_CLIENT_ID") ?: ""
-        buildConfigField("String", "GOOGLE_CLIENT_ID", "\"$googleClientId\"")
 
     }
 
-    /*
-    * Após sincronizar e rodar o app, o Android Studio vai ler o local.properties e gerar automaticamente uma calsse java chamada BuildConfig
-    * (app/build/generated/source). Agora não será necessário inserir o código do Google Sign-in no código, apenas chama-lo.
-    * */
-
     buildFeatures {
+        // Ativa a geração de classe BuildConfig, onde será injetada a chave de API do local.properties
         buildConfig = true
+        // Recurso que facilita a interação com os elementos de layout do código. Gera automaticamente uma classe de vinculação para cada arquivo XML do projeto
+        viewBinding = true
     }
 
     buildTypes {
@@ -54,20 +48,41 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
+
+    // Carregando o properties da raiz do projeto
+    val properties = Properties()
+    val localPropertiesFile = project.rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+        properties.load(FileInputStream(localPropertiesFile))
+    }
+    // Acessando a chave GOOGLE_CLIENT_ID dentro do properties e injetando ela no BuildConfig
+    val googleClientId = properties.getProperty("GOOGLE_CLIENT_ID") ?: ""
+    defaultConfig.buildConfigField("String", "GOOGLE_CLIENT_ID", "\"$googleClientId\"")
+
+    /*
+    * Após sincronizar e rodar o app, o Android Studio vai ler o local.properties e gerar automaticamente uma calsse java chamada BuildConfig
+    * (app/build/generated/source). Agora não será necessário inserir o código do Google Sign-in no código, apenas chama-lo.
+    * */
 }
 
 dependencies {
-    //val roomVersion = "2.8.4"
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
-    //implementation("androidx.room:room-runtime:$roomVersion")
-    //annotationProcessor("androidx.room:room-compiler:$roomVersion")
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    // Arquitetura e Ciclo de Vida
+    implementation(libs.bundles.lifecycle)
+    // Room Database ("JPA")
+    implementation(libs.androidx.room.runtime)
+    annotationProcessor(libs.androidx.room.compiler)
+    // Segurança
+    implementation(libs.androidx.security.crypto)
+    // Autenticação Google Sign-in
+    implementation(libs.google.play.services.auth)
 }
