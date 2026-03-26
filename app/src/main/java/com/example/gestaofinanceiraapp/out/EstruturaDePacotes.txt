@@ -1,0 +1,13 @@
+data: camada de persistência
+    local: banco de dados, aqui ficarão as Entities e o DAOs (Abstrai os detalhes de como os dados são armazenados e recuperados)
+    remote: futura sincronização
+    repository: implementações das interfaces de repositório
+
+domain: núcleo do app
+    model: classes puras de Java representando modelos de negócio
+    repository: interfaces dos repositórios (visando inversão de dependência)
+    usecase: casos de uso específicos
+
+presentation: camada de visualização
+    ui: "controllers"
+    viewmodel: classes responsáveis por manter o estado da tela e conectar a UI aos usecases
