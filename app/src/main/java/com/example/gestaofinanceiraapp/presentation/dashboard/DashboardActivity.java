@@ -5,6 +5,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.gestaofinanceiraapp.R;
 
@@ -22,12 +23,15 @@ public class DashboardActivity extends AppCompatActivity {
      */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         /*
         No Andorid, os visuais são feitos em arquivos XMLL. A classe R (Resources) é gerada automaticamente pelo sistema e mapeia todos os
         arquivos visuais. Aqui estamos pegando o arquivo XM activity_dashboard e desenhando ele na tela
          */
         setContentView(R.layout.activity_dashboard);
+
+        DashboardViewModelFactory factory = new DashboardViewModelFactory(this);
+
+        viewModel = new ViewModelProvider(this, factory).get(DashboardViewModel.class);
 
         setupObservers();
     }

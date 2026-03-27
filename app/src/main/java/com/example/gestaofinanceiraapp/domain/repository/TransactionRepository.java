@@ -10,5 +10,5 @@ public interface TransactionRepository {
     void delete(String transactionId);
 
     // Buscar transações de um período estipulado
-    List<Transaction> getTransactionsByPeriod(LocalDateTime startDate, LocalDateTime endDate)
+    List<Transaction> getTransactionsByPeriod(LocalDateTime startDate, LocalDateTime endDate);
 }
