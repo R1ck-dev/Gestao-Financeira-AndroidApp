@@ -22,3 +22,17 @@ com.example.gestaofinanceiraapp
      ├── budget/            // Telas e ViewModels de Orçamento
      ├── dashboard/         // Tela principal e ViewModel de sumário
      └── ledger/            // Telas de input financeiro
+
+* A Camada de Apresentação é provavelmente a mais complicada, justamente por ser a mais diferente de padrões Spring MVC. No caso de um backend
+Spring comum nós geralmente temos esse fluxo: a requisição HTTP chega no Controller, que vai chamar a instância de um Service, que por sua vez
+utiliza-se do Repository. Tudo isso para o Controller devolver um JSON estático ao usuário.
+
+No mobile, a tela é mais viva e reativa. A atividade do usuário não gira em torno de requisições, mas sim na interação com a interface
+que deve refletir o estado dos dados em tempo real. Por isso vamos utilizar o padrão MVVM (Model-View-ViewModel)
+
+View (Activity/Fragment): É o equivalente Controller + XML. Sua função é desenhar na tela e capturar cliques, não possuindo regras de negócio.
+
+ViewModel: É o equivalente ao Service focado no estado da UI. Ele deve estar pronto para receber rotações de tela.
+
+LiveData: É o "objeto a ser observado". O ViewModel vai expor um LiveData, e a View vai ficar observando esse LiveData, para poder desenhar
+na tela. Quando o ViewModel atualiza o LiveData, a View deve se redesenhar automaticamente.
