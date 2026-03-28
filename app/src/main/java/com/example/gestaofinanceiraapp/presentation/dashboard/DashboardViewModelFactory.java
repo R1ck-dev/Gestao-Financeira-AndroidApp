@@ -11,6 +11,7 @@ import com.example.gestaofinanceiraapp.data.repository.TransactionRepositoryImpl
 import com.example.gestaofinanceiraapp.domain.repository.TransactionRepository;
 
 public class DashboardViewModelFactory implements ViewModelProvider.Factory {
+
     private final Context context;
 
     public DashboardViewModelFactory(Context context) {

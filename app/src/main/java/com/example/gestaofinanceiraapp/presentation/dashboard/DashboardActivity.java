@@ -1,5 +1,6 @@
 package com.example.gestaofinanceiraapp.presentation.dashboard;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -8,6 +9,8 @@ import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.gestaofinanceiraapp.R;
+import com.example.gestaofinanceiraapp.presentation.ledger.LedgerActivity;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 
 import java.math.BigDecimal;
 import java.text.NumberFormat;
@@ -34,6 +37,21 @@ public class DashboardActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this, factory).get(DashboardViewModel.class);
 
         setupObservers();
+        setupListeners();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        viewModel.loadDashboardData();
+    }
+
+    private void setupListeners() {
+        ExtendedFloatingActionButton fab = findViewById(R.id.fabAddTransaction);
+        fab.setOnClickListener(v -> {
+            Intent intent = new Intent(DashboardActivity.this, LedgerActivity.class);
+            startActivity(intent);
+        });
     }
 
     private void setupObservers() {
@@ -58,18 +76,22 @@ public class DashboardActivity extends AppCompatActivity {
         passado, para que possamos manipula-lo.
          */
         TextView txtBalance = findViewById(R.id.txtTotalBalance);
+        TextView txtIncomes = findViewById(R.id.txtTotalIncomes);
+        TextView txtExpenses = findViewById(R.id.txtTotalExpenses);
 
-        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
-        String balanceFormatted = currencyFormat.format(state.getTotalBalance());
+        NumberFormat format = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
 
-        txtBalance.setText(balanceFormatted);
+        String balanceStr = format.format(state.getTotalBalance());
+        txtBalance.setText(balanceStr);
+        txtIncomes.setText(format.format(state.getTotalIncomes()));
+        txtExpenses.setText(format.format(state.getTotalExpenses()));
 
         if (state.getTotalBalance().compareTo(BigDecimal.ZERO) >= 0) {
             txtBalance.setTextColor(ContextCompat.getColor(this, android.R.color.holo_green_dark));
-            txtBalance.setContentDescription("Saldo positivo de " + balanceFormatted);
+            txtBalance.setContentDescription("Saldo positivo de " + balanceStr);
         } else {
             txtBalance.setTextColor(ContextCompat.getColor(this, android.R.color.holo_red_dark));
-            txtBalance.setContentDescription("Saldo negativo de " + balanceFormatted);
+            txtBalance.setContentDescription("Saldo negativo de " + balanceStr);
         }
     }
 }
