@@ -23,7 +23,7 @@ public class BudgetProgress {
     }
 
     // Calcula a porcentagem gasta
-    public int getPercentSpent() {
+    public int getPercentageSpent() {
         if (targetAmount.compareTo(BigDecimal.ZERO) == 0) return 0;
 
         // (gasto / teto) * 100 utilizando operadores de BigDecimal para manter precisão

@@ -2,10 +2,12 @@ package com.example.gestaofinanceiraapp.data.local.room;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.gestaofinanceiraapp.data.local.room.dao.BudgetDao;
 import com.example.gestaofinanceiraapp.data.local.room.dao.CategoryDao;
@@ -13,6 +15,10 @@ import com.example.gestaofinanceiraapp.data.local.room.dao.TransactionDao;
 import com.example.gestaofinanceiraapp.data.local.room.entity.BudgetEntity;
 import com.example.gestaofinanceiraapp.data.local.room.entity.CategoryEntity;
 import com.example.gestaofinanceiraapp.data.local.room.entity.TransactionEntity;
+
+import java.time.YearMonth;
+import java.util.UUID;
+import java.util.concurrent.Executors;
 
 // Definindo as entidades e versão que irão se relacionar
 // ExportSchema = true permite que o ROOM salve um JSON do esquema
@@ -22,7 +28,7 @@ import com.example.gestaofinanceiraapp.data.local.room.entity.TransactionEntity;
                 CategoryEntity.class,
                 BudgetEntity.class
         },
-        version = 2, // Subindo a versão do BD devido a alteração do esquema.
+        version = 3, // Subindo a versão do BD devido a alteração do esquema.
         exportSchema = true
 )
 @TypeConverters({Converters.class}) // Registrando conversores globais
@@ -67,10 +73,47 @@ public abstract class AppDatabase extends RoomDatabase {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             AppDatabase.class, "pfm_database")
                             .fallbackToDestructiveMigration()
+                            // --- Data Seed ---
+                            // .addCallback(roomCallback)
+                            // -----------------
                             .build();
                 }
             }
         }
         return INSTANCE;
     }
+//    private static final RoomDatabase.Callback roomCallback = new RoomDatabase.Callback() {
+//        @Override
+//        public void onCreate(@NonNull SupportSQLiteDatabase db) {
+//            super.onCreate(db);
+//
+//            // Operações de banco não podem rodar na Main Thread!
+//            Executors.newSingleThreadExecutor().execute(() -> {
+//                // Pegamos a instância recém-criada
+//                AppDatabase database = INSTANCE;
+//                if (database != null) {
+//                    CategoryDao categoryDao = database.categoryDao();
+//                    BudgetDao budgetDao = database.budgetDao();
+//
+//                    // 1. Semeando a Categoria (com o ID que usamos no Ledger!)
+//                    CategoryEntity category = new CategoryEntity();
+//                    category.id = "default_category";
+//                    category.name = "Alimentação";
+//                    category.color = "#2E7D32"; // Verde do M3
+//                    category.icon = "ic_food";
+//                    categoryDao.insert(category);
+//
+//                    // 2. Semeando o Orçamento para o mês VIGENTE
+//                    BudgetEntity budget = new BudgetEntity();
+//                    budget.id = UUID.randomUUID().toString();
+//                    budget.categoryId = "default_category";
+//                    budget.monthRef = YearMonth.now().toString(); // Dinâmico: Pega o mês atual da JVM
+//                    budget.targetAmount = "1500.00"; // Teto de gastos de R$ 1.500,00
+//                    budgetDao.insert(budget);
+//
+//                    // (Você pode adicionar mais categorias e orçamentos aqui se quiser!)
+//                }
+//            });
+//        }
+//    };
 }

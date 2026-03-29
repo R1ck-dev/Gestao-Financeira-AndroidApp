@@ -27,6 +27,10 @@
             android:name=".presentation.ledger.LedgerActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".presentation.budget.BudgetsActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>

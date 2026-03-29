@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.gestaofinanceiraapp.R;
 import com.example.gestaofinanceiraapp.databinding.ActivityDashboardBinding;
+import com.example.gestaofinanceiraapp.presentation.budget.BudgetsActivity;
 import com.example.gestaofinanceiraapp.presentation.ledger.LedgerActivity;
 import com.example.gestaofinanceiraapp.presentation.ledger.LedgerViewModel;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -57,7 +58,12 @@ public class DashboardActivity extends AppCompatActivity {
     private void setupListeners() {
         // Acessando o botão diretamente pelo binding
         binding.fabAddTransaction.setOnClickListener(v -> {
-            Intent intent = new Intent(DashboardActivity.this, LedgerViewModel.class);
+            Intent intent = new Intent(DashboardActivity.this, LedgerActivity.class);
+            startActivity(intent);
+        });
+
+        binding.btnViewBudgets.setOnClickListener(v -> {
+            Intent intent = new Intent(DashboardActivity.this, BudgetsActivity.class);
             startActivity(intent);
         });
     }

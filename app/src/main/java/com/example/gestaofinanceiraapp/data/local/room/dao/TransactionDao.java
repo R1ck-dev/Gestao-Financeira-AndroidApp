@@ -19,6 +19,6 @@ public interface TransactionDao {
     @Query("DELETE FROM transactions WHERE id = :transactionId") // O ":" indicam um param nomeado. Servindo para vincular uma variável na query
     void delete(String transactionId);
 
-    @Query("SELECT * FROM transactions WHERE create_at BETWEEN :startDate AND :endDate")
+    @Query("SELECT * FROM transactions WHERE created_at BETWEEN :startDate AND :endDate")
     List<TransactionEntity> getTransactionByPeriod(String startDate, String endDate);
 }
