@@ -7,12 +7,24 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
+import com.example.gestaofinanceiraapp.data.local.room.dao.BudgetDao;
+import com.example.gestaofinanceiraapp.data.local.room.dao.CategoryDao;
 import com.example.gestaofinanceiraapp.data.local.room.dao.TransactionDao;
+import com.example.gestaofinanceiraapp.data.local.room.entity.BudgetEntity;
+import com.example.gestaofinanceiraapp.data.local.room.entity.CategoryEntity;
 import com.example.gestaofinanceiraapp.data.local.room.entity.TransactionEntity;
 
 // Definindo as entidades e versão que irão se relacionar
 // ExportSchema = true permite que o ROOM salve um JSON do esquema
-@Database(entities = {TransactionEntity.class}, version = 1, exportSchema = true)
+@Database(
+        entities = {
+                TransactionEntity.class,
+                CategoryEntity.class,
+                BudgetEntity.class
+        },
+        version = 2, // Subindo a versão do BD devido a alteração do esquema.
+        exportSchema = true
+)
 @TypeConverters({Converters.class}) // Registrando conversores globais
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -23,6 +35,8 @@ public abstract class AppDatabase extends RoomDatabase {
     e gerar uma classe real chamada AppDatabase_Impl.java . Essa classe gerada vai implementar os métodos e instanciar o DAO de verdade
      */
     public abstract TransactionDao transactionDao();
+    public abstract CategoryDao categoryDao();
+    public abstract BudgetDao budgetDao();
 
     // Implementação Singleton
     /*
