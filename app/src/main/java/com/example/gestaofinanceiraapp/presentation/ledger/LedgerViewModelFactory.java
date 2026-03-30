@@ -6,7 +6,9 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.gestaofinanceiraapp.data.local.room.AppDatabase;
+import com.example.gestaofinanceiraapp.data.repository.CategoryRepositoryImpl;
 import com.example.gestaofinanceiraapp.data.repository.TransactionRepositoryImpl;
+import com.example.gestaofinanceiraapp.domain.repository.CategoryRepository;
 import com.example.gestaofinanceiraapp.domain.repository.TransactionRepository;
 
 /*
@@ -48,7 +50,9 @@ public class LedgerViewModelFactory implements ViewModelProvider.Factory {
             TransactionRepository repository = ... vai tipar a variável com a nossa interface pura de domínio
              */
             TransactionRepository repository = new TransactionRepositoryImpl(db.transactionDao());
-            return (T) new LedgerViewModel(repository);
+            CategoryRepository categoryRepo = new CategoryRepositoryImpl(db.categoryDao());
+
+            return (T) new LedgerViewModel(repository, categoryRepo);
         }
         throw new IllegalArgumentException("Classe ViewModel desconhecida");
     }

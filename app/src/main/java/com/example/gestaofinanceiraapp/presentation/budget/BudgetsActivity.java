@@ -1,5 +1,6 @@
 package com.example.gestaofinanceiraapp.presentation.budget;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
@@ -59,9 +60,8 @@ public class BudgetsActivity extends AppCompatActivity {
 
     private void setupListeners() {
         binding.fabAddBudget.setOnClickListener(v -> {
-            // Em breve, abriremos uma tela para criar o Orçamento.
-            // Por enquanto, exibimos um Toast.
-            Toast.makeText(this, "Funcionalidade de Nova Meta em breve", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(BudgetsActivity.this, AddBudgetActivity.class);
+            startActivity(intent);
         });
     }
 }

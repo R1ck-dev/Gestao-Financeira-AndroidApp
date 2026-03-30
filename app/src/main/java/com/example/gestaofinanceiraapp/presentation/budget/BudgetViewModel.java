@@ -1,5 +1,6 @@
 package com.example.gestaofinanceiraapp.presentation.budget;
 
+import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -18,9 +19,7 @@ public class BudgetViewModel extends ViewModel {
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     private final MutableLiveData<List<BudgetProgress>> _budgetList = new MutableLiveData<>();
-    public LiveData<List<BudgetProgress>> getBudgetList() {
-        return _budgetList;
-    }
+    public LiveData<List<BudgetProgress>> getBudgetList() { return _budgetList; }
 
     public BudgetViewModel(GetBudgetProgressUseCase getBudgetProgressUseCase) {
         this.getBudgetProgressUseCase = getBudgetProgressUseCase;
@@ -28,14 +27,12 @@ public class BudgetViewModel extends ViewModel {
 
     public void loadBudgetsForCurrentMonth() {
         executor.execute(() -> {
-            // Pega o mês atual via Java 8 Time API
-            YearMonth currentMonth = YearMonth.now();
-
-            // Executa a regra de negócio cruzando as tabelas
-            List<BudgetProgress> progressList = getBudgetProgressUseCase.execute(currentMonth);
-
-            // Joga o resultado de volta para a Main Thread
-            _budgetList.postValue(progressList);
+            try {
+                List<BudgetProgress> progressList = getBudgetProgressUseCase.execute(YearMonth.now());
+                _budgetList.postValue(progressList);
+            } catch (Exception e) {
+                Log.e("BUDGET_LOG", "Erro ao carregar orçamentos: ", e);
+            }
         });
     }
 

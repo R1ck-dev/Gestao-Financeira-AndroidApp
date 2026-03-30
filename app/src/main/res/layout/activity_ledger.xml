@@ -62,13 +62,29 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/inputLayoutCategory"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="Categoria"
+        app:layout_constraintTop_toBottomOf="@id/inputLayoutAmount">
+
+        <AutoCompleteTextView
+            android:id="@+id/autoCompleteCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/inputLayoutDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:hint="Descrição (Ex: Mercado, Salário)"
+        android:hint="Descrição (Opcional)"
         style="?attr/textInputOutlinedStyle"
-        app:layout_constraintTop_toBottomOf="@id/inputLayoutAmount">
+        app:layout_constraintTop_toBottomOf="@id/inputLayoutCategory">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edtDescription"

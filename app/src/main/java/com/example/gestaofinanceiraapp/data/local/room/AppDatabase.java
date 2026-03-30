@@ -28,7 +28,7 @@ import java.util.concurrent.Executors;
                 CategoryEntity.class,
                 BudgetEntity.class
         },
-        version = 3, // Subindo a versão do BD devido a alteração do esquema.
+        version = 5, // Subindo a versão do BD devido a alteração do esquema.
         exportSchema = true
 )
 @TypeConverters({Converters.class}) // Registrando conversores globais
@@ -52,6 +52,12 @@ public abstract class AppDatabase extends RoomDatabase {
     guardar essa variável em cache de CPU, mas sim direto na memória ram principal, garantindo que as diferentes threads enxerguem essa
     criação instantaneamente
      */
+    /*
+    A varíavel INSTANCE carrega a conexão ativa e o mecanismo de gerenciamento do BD SQLite.
+    Ela não guarda os dados diretamente na memória RAM, mas sim a lógica que permite acessá-los.
+    Portanto essa instância carrega a conexão com o SQLite, Gerenciador de Cache, Implementação dos DAOs,
+    Esquema do Banco e Estado de Migração.
+     */
     private static volatile AppDatabase INSTANCE;
 
     public static AppDatabase getDataBase(final Context context) {
@@ -74,7 +80,7 @@ public abstract class AppDatabase extends RoomDatabase {
                             AppDatabase.class, "pfm_database")
                             .fallbackToDestructiveMigration()
                             // --- Data Seed ---
-                            // .addCallback(roomCallback)
+                            .addCallback(roomCallback)
                             // -----------------
                             .build();
                 }
@@ -82,38 +88,39 @@ public abstract class AppDatabase extends RoomDatabase {
         }
         return INSTANCE;
     }
-//    private static final RoomDatabase.Callback roomCallback = new RoomDatabase.Callback() {
-//        @Override
-//        public void onCreate(@NonNull SupportSQLiteDatabase db) {
-//            super.onCreate(db);
-//
-//            // Operações de banco não podem rodar na Main Thread!
-//            Executors.newSingleThreadExecutor().execute(() -> {
-//                // Pegamos a instância recém-criada
-//                AppDatabase database = INSTANCE;
-//                if (database != null) {
-//                    CategoryDao categoryDao = database.categoryDao();
-//                    BudgetDao budgetDao = database.budgetDao();
-//
-//                    // 1. Semeando a Categoria (com o ID que usamos no Ledger!)
-//                    CategoryEntity category = new CategoryEntity();
-//                    category.id = "default_category";
-//                    category.name = "Alimentação";
-//                    category.color = "#2E7D32"; // Verde do M3
-//                    category.icon = "ic_food";
-//                    categoryDao.insert(category);
-//
-//                    // 2. Semeando o Orçamento para o mês VIGENTE
-//                    BudgetEntity budget = new BudgetEntity();
-//                    budget.id = UUID.randomUUID().toString();
-//                    budget.categoryId = "default_category";
-//                    budget.monthRef = YearMonth.now().toString(); // Dinâmico: Pega o mês atual da JVM
-//                    budget.targetAmount = "1500.00"; // Teto de gastos de R$ 1.500,00
-//                    budgetDao.insert(budget);
-//
-//                    // (Você pode adicionar mais categorias e orçamentos aqui se quiser!)
-//                }
-//            });
-//        }
-//    };
+
+    private static final RoomDatabase.Callback roomCallback = new RoomDatabase.Callback() {
+        @Override
+        public void onCreate(@NonNull SupportSQLiteDatabase db) {
+            super.onCreate(db);
+
+            Executors.newSingleThreadExecutor().execute(() -> {
+                AppDatabase database = INSTANCE;
+                if (database != null) {
+                    CategoryDao categoryDao = database.categoryDao();
+
+                    categoryDao.insert(createCategory("default_category", "Alimentação", "#2E7D32", "ic_food"));
+
+                    categoryDao.insert(createCategory("cat_transport", "Transporte", "#1565C0", "ic_transport"));
+
+                    categoryDao.insert(createCategory("cat_housing", "Moradia", "#6A1B9A", "ic_home"));
+
+                    categoryDao.insert(createCategory("cat_health", "Saúde", "#C62828", "ic_health"));
+
+                    categoryDao.insert(createCategory("cat_leisure", "Lazer", "#F9A825", "ic_leisure"));
+
+                    categoryDao.insert(createCategory("cat_salary", "Salário/Renda", "#00695C", "ic_money"));
+                }
+            });
+        }
+    };
+
+    private static CategoryEntity createCategory(String id, String name, String color, String icon) {
+        CategoryEntity category = new CategoryEntity();
+        category.id = id;
+        category.name = name;
+        category.color = color;
+        category.icon = icon;
+        return category;
+    }
 }
