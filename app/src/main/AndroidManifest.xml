@@ -27,6 +27,11 @@
             android:name=".presentation.ledger.LedgerActivity"
             android:exported="false" />
 
+        <!-- Tela de Histórico -->
+        <activity
+            android:name=".presentation.history.HistoryActivity"
+            android:exported="false" />
+
         <activity
             android:name=".presentation.budget.BudgetsActivity"
             android:exported="false" />
