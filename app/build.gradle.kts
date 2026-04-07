@@ -85,4 +85,8 @@ dependencies {
     implementation(libs.androidx.security.crypto)
     // Autenticação Google Sign-in
     implementation(libs.google.play.services.auth)
+    // Bibliotecas do Credential Manager e Google Sign-In
+    implementation("androidx.credentials:credentials:1.2.2")
+    implementation("androidx.credentials:credentials-play-services-auth:1.2.2")
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.0")
 }
