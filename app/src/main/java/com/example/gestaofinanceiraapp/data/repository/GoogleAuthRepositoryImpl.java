@@ -8,6 +8,7 @@ import androidx.credentials.GetCredentialRequest;
 import androidx.credentials.GetCredentialResponse;
 import androidx.credentials.exceptions.GetCredentialException;
 
+import com.example.gestaofinanceiraapp.BuildConfig;
 import com.example.gestaofinanceiraapp.domain.auth.AuthRepository;
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption;
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential;
@@ -25,7 +26,7 @@ public class GoogleAuthRepositoryImpl implements AuthRepository {
 
         GetGoogleIdOption googleIdOption = new GetGoogleIdOption.Builder()
                 .setFilterByAuthorizedAccounts(false)
-                .setServerClientId("766472644831-ve9rd3la28oplvr9abf2a1addaq8nls5.apps.googleusercontent.com")
+                .setServerClientId(BuildConfig.GOOGLE_CLIENT_ID)
                 .setAutoSelectEnabled(false)
                 .build();
 
