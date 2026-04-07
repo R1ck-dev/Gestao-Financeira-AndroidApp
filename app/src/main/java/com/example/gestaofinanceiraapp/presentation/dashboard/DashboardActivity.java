@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.gestaofinanceiraapp.R;
 import com.example.gestaofinanceiraapp.databinding.ActivityDashboardBinding;
 import com.example.gestaofinanceiraapp.presentation.budget.BudgetsActivity;
+import com.example.gestaofinanceiraapp.presentation.history.HistoryActivity;
 import com.example.gestaofinanceiraapp.presentation.ledger.LedgerActivity;
 import com.example.gestaofinanceiraapp.presentation.ledger.LedgerViewModel;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
@@ -64,6 +65,12 @@ public class DashboardActivity extends AppCompatActivity {
 
         binding.btnViewBudgets.setOnClickListener(v -> {
             Intent intent = new Intent(DashboardActivity.this, BudgetsActivity.class);
+            startActivity(intent);
+        });
+
+        //
+        binding.btnViewHistory.setOnClickListener(v -> {
+            Intent intent = new Intent(DashboardActivity.this, HistoryActivity.class);
             startActivity(intent);
         });
     }
